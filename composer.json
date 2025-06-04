@@ -1,0 +1,15 @@
+{
+  "name": "am0n666/codex-ebook-advanced",
+  "description": "Zaawansowany kreator e-booków PDF (PHP 8.x) z szablonami, stylami, okładką i rozdziałami.",
+  "type": "project",
+  "require": {
+    "dompdf/dompdf": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Codex\\": "src/"
+    }
+  },
+  "minimum-stability": "stable",
+  "license": "MIT"
+}
