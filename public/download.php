@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/Parsedown.php';
 use Dompdf\Dompdf;
 
 // Współdzielona funkcja z preview.php
@@ -30,9 +31,11 @@ function render_ebook_html($data, $coverTmpPath = null) {
 
     // --- Rozdziały z anchorami ---
     $chaptersHtml = '';
+    $md = new Parsedown();
+    $md->setSafeMode(true);
     foreach ($chapters as $i => $ch) {
         $chapterTitle = htmlspecialchars($ch['title'] ?? '');
-        $chapterContent = nl2br(htmlspecialchars($ch['content'] ?? ''));
+        $chapterContent = $md->text($ch['content'] ?? '');
         $chaptersHtml .= "<h2 id=\"ch{$i}\">{$chapterTitle}</h2><div>{$chapterContent}</div><hr>";
     }
 

@@ -13,6 +13,7 @@ Konfigurowalny kreator e-booków PDF z szablonami, stylami, obsługą okładki, 
 - Podgląd PDF na żywo i pobieranie
 - Zapis/wczytywanie projektu (LocalStorage)
 - Eksport/import projektu jako plik JSON
+- Wczytywanie rozdziałów z plików Markdown
 
 ## Instalacja
 

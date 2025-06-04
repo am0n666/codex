@@ -59,6 +59,8 @@ $styles = [
                         <label>Treść:<br>
                             <textarea name="chapters[0][content]" rows="6" cols="50">Wpisz treść rozdziału...</textarea>
                         </label>
+                        <input type="file" accept=".md" style="display:none" onchange="readMarkdown(this)">
+                        <button type="button" onclick="this.previousElementSibling.click()">Wczytaj Markdown</button>
                         <button type="button" class="remove-chapter" onclick="removeChapter(this)">Usuń rozdział</button>
                     </div>
                 </div>
