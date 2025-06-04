@@ -9,6 +9,8 @@ document.getElementById('add-chapter').addEventListener('click', function() {
         <label>Treść:<br>
             <textarea name="chapters[${chapterCount}][content]" rows="6" cols="50">Wpisz treść rozdziału...</textarea>
         </label>
+        <input type="file" accept=".md" style="display:none" onchange="readMarkdown(this)">
+        <button type="button" onclick="this.previousElementSibling.click()">Wczytaj Markdown</button>
         <button type="button" class="remove-chapter" onclick="removeChapter(this)">Usuń rozdział</button>
     `;
     chaptersDiv.appendChild(chapterDiv);
@@ -17,6 +19,17 @@ document.getElementById('add-chapter').addEventListener('click', function() {
 
 function removeChapter(btn) {
     btn.parentNode.remove();
+}
+
+function readMarkdown(input) {
+    if (!input.files.length) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const textarea = input.parentNode.querySelector('textarea');
+        if (textarea) textarea.value = e.target.result;
+    };
+    reader.readAsText(file);
 }
 
 // --- Zapisywanie/Wczytywanie projektu w LocalStorage ---
@@ -68,6 +81,8 @@ function loadProject() {
                 <label>Treść:<br>
                     <textarea name="chapters[${i}][content]" rows="6" cols="50">${ch.content}</textarea>
                 </label>
+                <input type="file" accept=".md" style="display:none" onchange="readMarkdown(this)">
+                <button type="button" onclick="this.previousElementSibling.click()">Wczytaj Markdown</button>
                 <button type="button" class="remove-chapter" onclick="removeChapter(this)">Usuń rozdział</button>
             `;
             chaptersDiv.appendChild(chapterDiv);
