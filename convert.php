@@ -277,6 +277,8 @@ try {
                 $pandocArgs[] = "titlepage=true";
                 $pandocArgs[] = "-V";
                 $pandocArgs[] = "frontmatter=false";
+                $pandocArgs[] = "-V";
+                $pandocArgs[] = "book";
                 $latexHeader = "\\providecommand{\\frontmatter}{}\n" .
                     "\\providecommand{\\mainmatter}{}\n" .
                     "\\providecommand{\\backmatter}{}";
