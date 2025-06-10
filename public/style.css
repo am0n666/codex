@@ -1,8 +1,0 @@
-body { font-family: Arial, sans-serif; margin: 40px; }
-#ebook-ui { display: flex; gap: 40px; }
-form { min-width: 340px; }
-textarea { width: 100%; }
-iframe { border: 1px solid #888; }
-fieldset { margin-bottom: 16px; }
-.chapter { margin-bottom: 12px; border: 1px dashed #bbb; padding: 8px; }
-.remove-chapter { color: #c33; margin-top: 4px; }
