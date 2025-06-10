@@ -3,6 +3,15 @@ session_start();
 
 $uploadDir = __DIR__ . '/uploads/';
 $outputDir = __DIR__ . '/output/';
+$templateDir = __DIR__ . '/templates/';
+
+// Ensure working directories exist
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
+if (!is_dir($outputDir)) {
+    mkdir($outputDir, 0777, true);
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.php');
@@ -84,6 +93,7 @@ try {
 
     $pandocCmd = "pandoc";
     $pandocArgs = [
+        "--data-dir=" . escapeshellarg($templateDir),
         escapeshellarg($sourceFile),
         "-o", escapeshellarg($outputFile),
         "--metadata", "title=" . escapeshellarg($title),
@@ -111,7 +121,7 @@ try {
     if ($template !== 'default') {
         switch ($template) {
             case 'eisvogel':
-                $pandocArgs[] = "--template=eisvogel";
+                $pandocArgs[] = "--template=" . escapeshellarg($templateDir . 'eisvogel.latex');
                 $pandocArgs[] = "--listings";
                 break;
             case 'academic':
@@ -266,11 +276,15 @@ try {
             // Ensure eisvogel template works with book class by setting frontmatter support
             if ($template === 'eisvogel') {
                 $pandocArgs[] = "-V";
-                $pandocArgs[] = "titlepage=true"; $pandocArgs[] = "-V"; $pandocArgs[] = "frontmatter=false";
-                            $pandocArgs[] = "-V";
+                $pandocArgs[] = "titlepage=true";
+                $pandocArgs[] = "-V";
                 $pandocArgs[] = "frontmatter=false";
-                $latexHeader = "\providecommand{\frontmatter}[0]{};\providecommand{\mainmatter}[0]{};";
-                $headerFile = $uploadDir . $timestamp . '_custom_header.tex';
+                $pandocArgs[] = "-V";
+                $pandocArgs[] = "book";
+                $latexHeader = "\\providecommand{\\frontmatter}{}\n" .
+                    "\\providecommand{\\mainmatter}{}\n" .
+                    "\\providecommand{\\backmatter}{}";
+                $headerFile = $outputDir . $timestamp . '_custom_header.tex';
                 file_put_contents($headerFile, $latexHeader);
                 $pandocArgs[] = "--include-in-header=" . escapeshellarg($headerFile);
             }
