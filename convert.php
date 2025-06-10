@@ -307,7 +307,8 @@ try {
             $titlePageContent .= "author: \"" . str_replace('"', '\"', $author) . "\"\n";
             $titlePageContent .= "titlepage: true\n";
             $coverPathYAML = str_replace('\\', '/', $coverFile);
-            $titlePageContent .= "titlepage-background: \"" . str_replace("\"", "\\"", $coverPathYAML) . "\"\n";
+            $escapedCover = str_replace('"', '\\"', $coverPathYAML);
+            $titlePageContent .= "titlepage-background: \"{$escapedCover}\"\n";
             $titlePageContent .= "titlepage-rule-height: 0\n";
             $titlePageContent .= "titlepage-text-color: \"FFFFFF\"\n";
             $titlePageContent .= "---\n\n";
