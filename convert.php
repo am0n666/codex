@@ -33,6 +33,13 @@ try {
     $template = $_POST['template'] ?? 'default';
     $config = $_POST['config'] ?? [];
 
+    $chaptersOnlyToc = isset($config['chapters_only_toc']);
+    if ($chaptersOnlyToc) {
+        $generateToc = true;
+        $config['toc_depth'] = 1;
+        $config['page_numbers'] = 1;
+    }
+
     $timestamp = time();
     $uploadedFiles = [];
 
@@ -299,7 +306,8 @@ try {
             $titlePageContent .= "title: \"" . str_replace('"', '\"', $title) . "\"\n";
             $titlePageContent .= "author: \"" . str_replace('"', '\"', $author) . "\"\n";
             $titlePageContent .= "titlepage: true\n";
-            $titlePageContent .= "titlepage-background: \"" . str_replace('"', '\"', $coverFile) . "\"\n";
+            $coverPathYAML = str_replace('\\', '/', $coverFile);
+            $titlePageContent .= "titlepage-background: \"" . str_replace("\"", "\\"", $coverPathYAML) . "\"\n";
             $titlePageContent .= "titlepage-rule-height: 0\n";
             $titlePageContent .= "titlepage-text-color: \"FFFFFF\"\n";
             $titlePageContent .= "---\n\n";

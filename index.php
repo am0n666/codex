@@ -324,6 +324,12 @@ session_start();
                                     <option value="5">5 poziomów</option>
                                 </select>
                             </div>
+                            <div class="config-item">
+                                <label title="Generuje spis treści zawierający tylko nazwy rozdziałów wraz z numerami stron">
+                                    <input type="checkbox" name="config[chapters_only_toc]" value="1">
+                                    Spis tylko z rozdziałami i numerami stron
+                                </label>
+                            </div>
                         </div>
                     </fieldset>
                     
