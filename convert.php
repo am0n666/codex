@@ -3,6 +3,7 @@ session_start();
 
 $uploadDir = __DIR__ . '/uploads/';
 $outputDir = __DIR__ . '/output/';
+$templateDir = __DIR__ . '/templates/';
 
 // Ensure working directories exist
 if (!is_dir($uploadDir)) {
@@ -92,6 +93,7 @@ try {
 
     $pandocCmd = "pandoc";
     $pandocArgs = [
+        "--data-dir=" . escapeshellarg($templateDir),
         escapeshellarg($sourceFile),
         "-o", escapeshellarg($outputFile),
         "--metadata", "title=" . escapeshellarg($title),
@@ -119,7 +121,7 @@ try {
     if ($template !== 'default') {
         switch ($template) {
             case 'eisvogel':
-                $pandocArgs[] = "--template=eisvogel";
+                $pandocArgs[] = "--template=" . escapeshellarg($templateDir . 'eisvogel.latex');
                 $pandocArgs[] = "--listings";
                 break;
             case 'academic':
