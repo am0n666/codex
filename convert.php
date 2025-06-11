@@ -33,6 +33,13 @@ try {
     $template = $_POST['template'] ?? 'default';
     $config = $_POST['config'] ?? [];
 
+    $chaptersOnlyToc = isset($config['chapters_only_toc']);
+    if ($chaptersOnlyToc) {
+        $generateToc = true;
+        $config['toc_depth'] = 1;
+        $config['page_numbers'] = 1;
+    }
+
     $timestamp = time();
     $uploadedFiles = [];
 
@@ -74,9 +81,19 @@ try {
             if ($index > 0) {
                 $mergedContent .= "\n\n";
             }
-            // Add chapter heading
-            $chapterNum = $index + 1;
-            $mergedContent .= "# Rozdział $chapterNum\n\n";
+
+            // Determine chapter title from the file's first heading or filename
+            $chapterTitle = null;
+            if (preg_match('/^\s*#+\s*(.+)$/m', $content, $matches)) {
+                $chapterTitle = trim($matches[1]);
+                // Remove the original heading to avoid duplicates
+                $content = preg_replace('/^\s*#+\s*.+\R?/', '', $content, 1);
+            } else {
+                $chapterTitle = pathinfo($file, PATHINFO_FILENAME);
+            }
+
+            // Add chapter heading using the determined title
+            $mergedContent .= "# " . $chapterTitle . "\n\n";
             $mergedContent .= $content;
         }
         
@@ -299,7 +316,9 @@ try {
             $titlePageContent .= "title: \"" . str_replace('"', '\"', $title) . "\"\n";
             $titlePageContent .= "author: \"" . str_replace('"', '\"', $author) . "\"\n";
             $titlePageContent .= "titlepage: true\n";
-            $titlePageContent .= "titlepage-background: \"" . str_replace('"', '\"', $coverFile) . "\"\n";
+            $coverPathYAML = str_replace('\\', '/', $coverFile);
+            $escapedCover = str_replace('"', '\\"', $coverPathYAML);
+            $titlePageContent .= "titlepage-background: \"{$escapedCover}\"\n";
             $titlePageContent .= "titlepage-rule-height: 0\n";
             $titlePageContent .= "titlepage-text-color: \"FFFFFF\"\n";
             $titlePageContent .= "---\n\n";
