@@ -81,9 +81,19 @@ try {
             if ($index > 0) {
                 $mergedContent .= "\n\n";
             }
-            // Add chapter heading
-            $chapterNum = $index + 1;
-            $mergedContent .= "# Rozdział $chapterNum\n\n";
+
+            // Determine chapter title from the file's first heading or filename
+            $chapterTitle = null;
+            if (preg_match('/^\s*#+\s*(.+)$/m', $content, $matches)) {
+                $chapterTitle = trim($matches[1]);
+                // Remove the original heading to avoid duplicates
+                $content = preg_replace('/^\s*#+\s*.+\R?/', '', $content, 1);
+            } else {
+                $chapterTitle = pathinfo($file, PATHINFO_FILENAME);
+            }
+
+            // Add chapter heading using the determined title
+            $mergedContent .= "# " . $chapterTitle . "\n\n";
             $mergedContent .= $content;
         }
         
